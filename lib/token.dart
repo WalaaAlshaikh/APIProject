@@ -8,12 +8,15 @@ import 'package:http_interceptor/models/response_data.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 
 class TokenHandler implements InterceptorContract{
+  String tokenKey;
+  TokenHandler({ required this.tokenKey});
+
   final storage =GetStorage();
   @override
   Future<RequestData> interceptRequest({required RequestData data}) async{
 
     try{
-      String? token =storage.read('token');
+      String? token =storage.read(tokenKey);
       data.headers.clear();
       if (token != null || token!.isNotEmpty) {
         bool hasExpired = JwtDecoder.isExpired(token);
